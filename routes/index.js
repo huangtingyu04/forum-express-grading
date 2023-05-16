@@ -3,7 +3,8 @@ const router = express.Router()
 
 // 新增，載入 controller
 const restController = require('../controllers/restaurant-controller')
-
+const admin = require('./modules/admin')
+router.use('/admin', admin)
 router.get('/restaurants', restController.getRestaurant)
 
 router.use('/', (req, res) => res.redirect('/restaurants'))
