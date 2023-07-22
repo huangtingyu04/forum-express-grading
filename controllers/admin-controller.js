@@ -11,6 +11,16 @@ const adminController = { // 修改這裡
   createRestaurant: (req, res) => {
     return res.render('admin/create-restaurant')
   },
+  getRestaurant: (req, res, next) => {
+    Restaurant.findByPk(req.params.id, { // 去資料庫用 id 找一筆資料
+      raw: true // 找到以後整理格式再回傳
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!") //  如果找不到，回傳錯誤訊息，後面不執行
+        res.render('admin/restaurant', { restaurant })
+      })
+      .catch(err => next(err))
+  },
   postRestaurant: (req, res, next) => {
     const { name, tel, address, openingHours, description } = req.body // 從 req.body 拿出表單裡的資料
     if (!name) throw new Error('Restaurant name is required!') // name 是必填，若發先是空值就會終止程式碼，並在畫面顯示錯誤提示
